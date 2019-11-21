@@ -1,10 +1,10 @@
-package com.zhh.pay.payexample;
+package com.zhh.pay;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PayExampleApplicationTests {
+class PayApplicationTests {
 
     @Test
     void contextLoads() {
