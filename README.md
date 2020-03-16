@@ -1,2 +1,2 @@
-# pay-example
-个人支付系统
+# payment-learning
+本项目用于个人支付相关学习

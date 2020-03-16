@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.zhh.pay</groupId>
-    <artifactId>pay-example</artifactId>
+    <artifactId>payment-learning</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>pay-example</name>
-    <description>Demo project for Spring Boot</description>
+    <name>payment-learning</name>
+    <description>本项目用于个人支付相关学习</description>
 
     <properties>
         <java.version>1.8</java.version>
