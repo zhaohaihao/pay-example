@@ -11,5 +11,5 @@
     </parent>
 
     <artifactId>pay</artifactId>
-    <name>支付系统</name>
+    <name>pay</name>
 </project>

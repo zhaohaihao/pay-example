@@ -11,5 +11,5 @@
     </parent>
 
     <artifactId>mall</artifactId>
-    <name>商城系统</name>
+    <name>mall</name>
 </project>
