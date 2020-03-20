@@ -1,7 +1,9 @@
 package com.zhh.payment.pay.controller;
 
+import com.lly835.bestpay.config.WxPayConfig;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
+import com.zhh.payment.pay.pojo.PayInfo;
 import com.zhh.payment.pay.service.impl.PayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class PayController {
     @Autowired
     private PayService payService;
 
+    @Autowired
+    private WxPayConfig wxPayConfig;
+
     /**
      * 发起支付
      *
@@ -34,9 +39,11 @@ public class PayController {
      * @return
      */
     @GetMapping("/create")
-    public ModelAndView create(@RequestParam("orderId") String orderId,
-                               @RequestParam("amount") BigDecimal amount,
-                               @RequestParam("payType") BestPayTypeEnum bestPayTypeEnum) {
+    public ModelAndView create(
+            @RequestParam("orderId") String orderId,
+            @RequestParam("amount") BigDecimal amount,
+            @RequestParam("payType") BestPayTypeEnum bestPayTypeEnum
+    ) {
         PayResponse payResponse = payService.create(orderId, amount, bestPayTypeEnum);
 
         Map<String, Object> map = new HashMap<>(2);
@@ -45,6 +52,8 @@ public class PayController {
         // 支付宝PC使用body
         if (bestPayTypeEnum == BestPayTypeEnum.WXPAY_NATIVE) {
             map.put("codeUrl", payResponse.getCodeUrl());
+            map.put("orderId", orderId);
+            map.put("returnUrl", wxPayConfig.getReturnUrl());
             return new ModelAndView("create_wx_native", map);
         } else if (bestPayTypeEnum == BestPayTypeEnum.ALIPAY_PC) {
             map.put("body", payResponse.getBody());
@@ -62,5 +71,18 @@ public class PayController {
     @ResponseBody
     public String asyncNotify(@RequestBody String notifyData) {
         return payService.asyncNotify(notifyData);
+    }
+
+    /**
+     * 根据订单号查询订单信息
+     *
+     * @param orderId 订单号
+     * @return
+     */
+    @GetMapping("/queryByOrderId")
+    @ResponseBody
+    public PayInfo queryByOrderId(@RequestParam("orderId") String orderId) {
+        log.info("查询订单号为{}的支付记录", orderId);
+        return payService.queryByOrderId(orderId);
     }
 }
