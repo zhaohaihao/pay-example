@@ -1,8 +1,8 @@
 package com.zhh.payment.pay.controller;
 
-import com.lly835.bestpay.config.WxPayConfig;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
+import com.zhh.payment.pay.config.WxAccountConfig;
 import com.zhh.payment.pay.pojo.PayInfo;
 import com.zhh.payment.pay.service.impl.PayService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class PayController {
     private PayService payService;
 
     @Autowired
-    private WxPayConfig wxPayConfig;
+    private WxAccountConfig wxAccountConfig;
 
     /**
      * 发起支付
@@ -53,7 +53,7 @@ public class PayController {
         if (bestPayTypeEnum == BestPayTypeEnum.WXPAY_NATIVE) {
             map.put("codeUrl", payResponse.getCodeUrl());
             map.put("orderId", orderId);
-            map.put("returnUrl", wxPayConfig.getReturnUrl());
+            map.put("returnUrl", wxAccountConfig.getReturnUrl());
             return new ModelAndView("create_wx_native", map);
         } else if (bestPayTypeEnum == BestPayTypeEnum.ALIPAY_PC) {
             map.put("body", payResponse.getBody());

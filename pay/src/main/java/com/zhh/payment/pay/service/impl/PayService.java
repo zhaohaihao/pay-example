@@ -78,6 +78,8 @@ public class PayService implements IPayService {
             payInfoMapper.updateByPrimaryKeySelective(payInfo);
         }
 
+        // TODO pay发送MQ消息, mall接收MQ消息
+
         if (payResponse.getPayPlatformEnum() == BestPayPlatformEnum.WX) {
             // 告诉微信不要再通知了
             return "<xml>\n" + "  <return_code><![CDATA[SUCCESS]]></return_code>\n" +
