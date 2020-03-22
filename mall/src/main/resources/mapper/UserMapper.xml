@@ -159,4 +159,10 @@
     FROM mall_user
     WHERE email = #{email,jdbcType=VARCHAR}
   </select>
+  <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM mall_user
+    WHERE username = #{username,jdbcType=VARCHAR}
+  </select>
 </mapper>

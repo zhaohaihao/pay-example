@@ -22,9 +22,14 @@ public class ResponseVO<T> {
 
     private T data;
 
-    public ResponseVO(Integer status, String msg) {
+    private ResponseVO(Integer status, String msg) {
         this.status = status;
         this.msg = msg;
+    }
+
+    private ResponseVO(Integer status, T data) {
+        this.status = status;
+        this.data = data;
     }
 
     /**
@@ -39,10 +44,20 @@ public class ResponseVO<T> {
     /**
      * 响应成功
      *
+     * @param data 响应数据
+     * @return
+     */
+    public static <T> ResponseVO<T> success(T data) {
+        return new ResponseVO(ResponseEnum.SUCCESS.getCode(), data);
+    }
+
+    /**
+     * 响应成功
+     *
      * @param msg 响应信息
      * @return
      */
-    public static <T> ResponseVO<T> success(String msg) {
+    public static <T> ResponseVO<T> successByMsg(String msg) {
         return new ResponseVO(ResponseEnum.SUCCESS.getCode(), msg);
     }
 

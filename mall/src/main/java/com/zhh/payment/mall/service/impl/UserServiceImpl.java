@@ -25,7 +25,7 @@ public class UserServiceImpl implements IUserService {
     private UserMapper userMapper;
 
     @Override
-    public ResponseVO register(User user) {
+    public ResponseVO<User> register(User user) {
         // username 不能重复
         int countByUsername = userMapper.countByUsername(user.getUsername());
         if (countByUsername > 0) {
@@ -52,4 +52,21 @@ public class UserServiceImpl implements IUserService {
         return ResponseVO.success();
     }
 
+    @Override
+    public ResponseVO<User> login(String username, String password) {
+        User user = userMapper.selectByUsername(username);
+        if (user == null) {
+            // 用户不存在
+            return ResponseVO.error(USERNAME_OR_PASSWORD_ERROR);
+        }
+
+        if (user.getPassword().equalsIgnoreCase(
+                DigestUtils.md5DigestAsHex(user.getPassword().getBytes(StandardCharsets.UTF_8)))) {
+            // 密码错误
+            return ResponseVO.error(USERNAME_OR_PASSWORD_ERROR);
+        }
+
+        user.setPassword("");
+        return ResponseVO.success(user);
+    }
 }

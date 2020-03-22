@@ -21,7 +21,19 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(RuntimeException.class)
     @ResponseBody
-    public ResponseVO handle(RuntimeException e) {
+    public ResponseVO handleRuntimeException(RuntimeException e) {
         return ResponseVO.error(ResponseEnum.ERROR, e.getMessage());
+    }
+
+    /**
+     * 用户登录异常处理
+     *
+     * @param e 用户登录异常
+     * @return
+     */
+    @ExceptionHandler(UserLoginException.class)
+    @ResponseBody
+    public ResponseVO handleUserLoginException(UserLoginException e) {
+        return ResponseVO.error(ResponseEnum.NEED_LOGIN);
     }
 }

@@ -30,4 +30,12 @@ public interface UserMapper {
      * @return
      */
     int countByEmail(String email);
+
+    /**
+     * 根据用户名查找用户信息
+     *
+     * @param username 用户名
+     * @return
+     */
+    User selectByUsername(String username);
 }
