@@ -22,7 +22,7 @@ CREATE TABLE `mall_category` (
   `parent_id` INT(11) DEFAULT NULL COMMENT '父类别ID, 当ID=0时说明是根节点, 一级类别',
   `name` VARCHAR(50) DEFAULT NULL COMMENT '类别名称',
   `status` TINYINT(1) DEFAULT '1' COMMENT '类别状态: 1-正常, 2-已废弃',
-  `sort_order` INT(4) DEFAULT NULL COMMENT '排序编号, 同类展示顺序, 数值相等则自然排序',
+  `sort_order` INT(4) DEFAULT '1' COMMENT '数字越大，优先级越高',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 	`update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
