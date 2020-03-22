@@ -4,7 +4,7 @@ import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
 import com.zhh.payment.pay.config.WxAccountConfig;
 import com.zhh.payment.pay.pojo.PayInfo;
-import com.zhh.payment.pay.service.impl.PayService;
+import com.zhh.payment.pay.service.impl.PayServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class PayController {
 
     @Autowired
-    private PayService payService;
+    private PayServiceImpl payServiceImpl;
 
     @Autowired
     private WxAccountConfig wxAccountConfig;
@@ -44,7 +44,7 @@ public class PayController {
             @RequestParam("amount") BigDecimal amount,
             @RequestParam("payType") BestPayTypeEnum bestPayTypeEnum
     ) {
-        PayResponse payResponse = payService.create(orderId, amount, bestPayTypeEnum);
+        PayResponse payResponse = payServiceImpl.create(orderId, amount, bestPayTypeEnum);
 
         Map<String, Object> map = new HashMap<>(2);
         // 支付方式不同, 渲染就不同
@@ -70,7 +70,7 @@ public class PayController {
     @PostMapping("/notify")
     @ResponseBody
     public String asyncNotify(@RequestBody String notifyData) {
-        return payService.asyncNotify(notifyData);
+        return payServiceImpl.asyncNotify(notifyData);
     }
 
     /**
@@ -83,6 +83,6 @@ public class PayController {
     @ResponseBody
     public PayInfo queryByOrderId(@RequestParam("orderId") String orderId) {
         log.info("查询订单号为{}的支付记录", orderId);
-        return payService.queryByOrderId(orderId);
+        return payServiceImpl.queryByOrderId(orderId);
     }
 }
