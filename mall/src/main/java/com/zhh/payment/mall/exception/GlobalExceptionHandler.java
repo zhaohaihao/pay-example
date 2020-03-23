@@ -2,6 +2,7 @@ package com.zhh.payment.mall.exception;
 
 import com.zhh.payment.mall.enums.ResponseEnum;
 import com.zhh.payment.mall.vo.ResponseVO;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,5 +36,17 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseVO handleUserLoginException(UserLoginException e) {
         return ResponseVO.error(ResponseEnum.NEED_LOGIN);
+    }
+
+    /**
+     * 表单验证异常处理
+     *
+     * @param e 表单验证异常
+     * @return
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public ResponseVO handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        return ResponseVO.error(ResponseEnum.ERROR, e.getBindingResult());
     }
 }
