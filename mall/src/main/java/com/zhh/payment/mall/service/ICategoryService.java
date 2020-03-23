@@ -4,6 +4,7 @@ import com.zhh.payment.mall.vo.CategoryVO;
 import com.zhh.payment.mall.vo.ResponseVO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author zhh
@@ -17,4 +18,12 @@ public interface ICategoryService {
      * @return
      */
     ResponseVO<List<CategoryVO>> findAll();
+
+    /**
+     * 查找子目录id集
+     *
+     * @param id           查询的类目ID
+     * @param resultSet    查询子目录ID集
+     */
+    void findSubCategoryId(Integer id, Set<Integer> resultSet);
 }

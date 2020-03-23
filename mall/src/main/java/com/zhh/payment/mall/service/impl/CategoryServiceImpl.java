@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.zhh.payment.mall.consts.MallConst.ROOT_PARENT_ID;
@@ -48,6 +49,28 @@ public class CategoryServiceImpl implements ICategoryService {
         findSubCategory(categoryVOList, categoryList);
 
         return ResponseVO.success(categoryVOList);
+    }
+
+    @Override
+    public void findSubCategoryId(Integer id, Set<Integer> resultSet) {
+        List<Category> categoryList = categoryMapper.selectAll();
+        findSubCategoryId(id, resultSet, categoryList);
+    }
+
+    /**
+     * 查找子目录id集
+     *
+     * @param id           查询的类目ID
+     * @param resultSet    查询子目录ID集
+     * @param categoryList 类目列表
+     */
+    private void findSubCategoryId(Integer id, Set<Integer> resultSet, List<Category> categoryList) {
+        for (Category category : categoryList) {
+            if (category.getParentId().equals(id)) {
+                resultSet.add(category.getId());
+                findSubCategoryId(category.getId(), resultSet, categoryList);
+            }
+        }
     }
 
     /**
