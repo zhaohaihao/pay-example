@@ -184,4 +184,59 @@ public class CartServiceImpl implements ICartService {
         opsForHash.delete(redisKey, String.valueOf(productId));
         return list(uid);
     }
+
+    @Override
+    public ResponseVO<CartVO> selectAll(Integer uid) {
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+
+        for (Cart cart : listForCart(uid)) {
+            cart.setProductSelected(true);
+            opsForHash.put(redisKey,
+                    String.valueOf(cart.getProductId()),
+                    GSON.toJson(cart));
+        }
+        return list(uid);
+    }
+
+    @Override
+    public ResponseVO<CartVO> unSelectAll(Integer uid) {
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+
+        for (Cart cart : listForCart(uid)) {
+            cart.setProductSelected(false);
+            opsForHash.put(redisKey,
+                    String.valueOf(cart.getProductId()),
+                    GSON.toJson(cart));
+        }
+        return list(uid);
+    }
+
+    @Override
+    public ResponseVO<Integer> sum(Integer uid) {
+        Integer sum = listForCart(uid).stream()
+                .map(Cart::getQuantity)
+                .reduce(0, Integer::sum);
+        return ResponseVO.success(sum);
+    }
+
+    /**
+     * 列出购物车列表
+     *
+     * @param uid 用户ID
+     * @return
+     */
+    private List<Cart> listForCart(Integer uid) {
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+        Map<String, String> entries = opsForHash.entries(redisKey);
+
+        List<Cart> cartList = new ArrayList<>();
+        for (Map.Entry<String, String> entry : entries.entrySet()) {
+            cartList.add(GSON.fromJson(entry.getValue(), Cart.class));
+        }
+
+        return cartList;
+    }
 }

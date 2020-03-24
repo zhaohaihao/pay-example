@@ -51,4 +51,22 @@ public class CartServiceImplTest extends MallApplicationTest {
         ResponseVO<CartVO> list = cartServiceImpl.delete(1, 1);
         log.info("list={}", GSON.toJson(list));
     }
+
+    @Test
+    public void selectAll() {
+        ResponseVO<CartVO> list = cartServiceImpl.selectAll(1);
+        log.info("list={}", GSON.toJson(list));
+    }
+
+    @Test
+    public void unSelectAll() {
+        ResponseVO<CartVO> list = cartServiceImpl.unSelectAll(1);
+        log.info("list={}", GSON.toJson(list));
+    }
+
+    @Test
+    public void sum() {
+        ResponseVO<Integer> list = cartServiceImpl.sum(1);
+        log.info("list={}", GSON.toJson(list));
+    }
 }

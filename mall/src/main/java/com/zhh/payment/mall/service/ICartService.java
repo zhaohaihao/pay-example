@@ -15,6 +15,7 @@ public interface ICartService {
     /**
      * 添加商品
      *
+     * @param uid         用户ID
      * @param cartAddForm 购物车添加表单
      * @return
      */
@@ -41,9 +42,33 @@ public interface ICartService {
     /**
      * 删除购物车
      *
-     * @param uid            用户ID
-     * @param productId      商品ID
+     * @param uid       用户ID
+     * @param productId 商品ID
      * @return
      */
     ResponseVO<CartVO> delete(Integer uid, Integer productId);
+
+    /**
+     * 购物车全选
+     *
+     * @param uid 用户ID
+     * @return
+     */
+    ResponseVO<CartVO> selectAll(Integer uid);
+
+    /**
+     * 购物车不全选
+     *
+     * @param uid 用户ID
+     * @return
+     */
+    ResponseVO<CartVO> unSelectAll(Integer uid);
+
+    /**
+     * 计算购物车中所有商品数量总和
+     *
+     * @param uid 用户ID
+     * @return
+     */
+    ResponseVO<Integer> sum(Integer uid);
 }
