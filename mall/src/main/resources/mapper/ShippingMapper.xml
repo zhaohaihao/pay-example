@@ -186,4 +186,24 @@
     FROM mall_shipping
     WHERE user_id = #{uid,jdbcType=INTEGER}
   </select>
+
+  <select id="selectByUidAndShippingId" resultType="com.zhh.payment.mall.pojo.Shipping">
+    SELECT <include refid="Base_Column_List" />
+    FROM mall_shipping
+    WHERE user_id = #{uid,jdbcType=INTEGER}
+    AND id = #{shippingId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByIdSet" resultType="com.zhh.payment.mall.pojo.Shipping">
+    SELECT <include refid="Base_Column_List" />
+    FROM mall_shipping
+    <where>
+      <if test="idSet.size > 0">
+        id IN
+        <foreach collection="idSet" item="item" index="index" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+  </select>
 </mapper>

@@ -186,4 +186,17 @@
       </foreach>
     </if>
   </select>
+
+  <select id="selectByProductIdSet" resultType="com.zhh.payment.mall.pojo.Product">
+    SELECT <include refid="Base_Column_List"/>
+    FROM mall_product
+    <where>
+      <if test="productIdSet.size() > 0">
+        id IN
+        <foreach collection="productIdSet" item="item" index="index" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+  </select>
 </mapper>

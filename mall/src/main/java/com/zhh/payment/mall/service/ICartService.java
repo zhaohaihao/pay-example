@@ -2,8 +2,11 @@ package com.zhh.payment.mall.service;
 
 import com.zhh.payment.mall.form.CartAddForm;
 import com.zhh.payment.mall.form.CartUpdateForm;
+import com.zhh.payment.mall.pojo.Cart;
 import com.zhh.payment.mall.vo.CartVO;
 import com.zhh.payment.mall.vo.ResponseVO;
+
+import java.util.List;
 
 /**
  * @author zhh
@@ -71,4 +74,12 @@ public interface ICartService {
      * @return
      */
     ResponseVO<Integer> sum(Integer uid);
+
+    /**
+     * 列出购物车列表
+     *
+     * @param uid 用户ID
+     * @return
+     */
+    List<Cart> listForCart(Integer uid);
 }
