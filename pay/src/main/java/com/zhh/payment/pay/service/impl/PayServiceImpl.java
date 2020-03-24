@@ -1,5 +1,6 @@
 package com.zhh.payment.pay.service.impl;
 
+import com.google.gson.Gson;
 import com.lly835.bestpay.enums.BestPayPlatformEnum;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.enums.OrderStatusEnum;
@@ -11,6 +12,7 @@ import com.zhh.payment.pay.enums.PayPlatformEnum;
 import com.zhh.payment.pay.pojo.PayInfo;
 import com.zhh.payment.pay.service.IPayService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,13 @@ public class PayServiceImpl implements IPayService {
 
     @Autowired
     private PayInfoMapper payInfoMapper;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+
+    private static final String QUERY_PAY_NOTIFY = "payNotify";
+
+    private static final Gson GSON = new Gson();
 
     @Override
     public PayResponse create(String orderId, BigDecimal amount, BestPayTypeEnum bestPayTypeEnum) {
@@ -78,7 +87,8 @@ public class PayServiceImpl implements IPayService {
             payInfoMapper.updateByPrimaryKeySelective(payInfo);
         }
 
-        // TODO pay发送MQ消息, mall接收MQ消息
+        // pay发送MQ消息, mall接收MQ消息
+        amqpTemplate.convertAndSend(QUERY_PAY_NOTIFY, GSON.toJson(payInfo));
 
         if (payResponse.getPayPlatformEnum() == BestPayPlatformEnum.WX) {
             // 告诉微信不要再通知了

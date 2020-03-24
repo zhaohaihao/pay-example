@@ -191,7 +191,7 @@ public class OrderServiceImpl implements IOrderService {
 
         order.setStatus(OrderStatusEnum.CANCELED.getCode());
         order.setCloseTime(new Date());
-        int row = orderMapper.updateByPrimaryKey(order);
+        int row = orderMapper.updateByPrimaryKeySelective(order);
         if (row <= 0) {
             return ResponseVO.error(ERROR);
         }
@@ -201,7 +201,23 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public void paid(Long orderNo) {
+        Order order = orderMapper.selectByOrderNo(orderNo);
+        if (order == null) {
+            // 告警
+            throw new RuntimeException(ORDER_NOT_EXIST.getDesc() + "订单ID: " + orderNo);
+        }
 
+        // 这里规定只有未付款订单可以变成已付款
+        if (!order.getStatus().equals(OrderStatusEnum.NO_PAY.getCode())) {
+            throw new RuntimeException(ORDER_STATUS_ERROR.getDesc() + "订单ID: " + orderNo);
+        }
+
+        order.setStatus(OrderStatusEnum.PAID.getCode());
+        order.setPaymentTime(new Date());
+        int row = orderMapper.updateByPrimaryKeySelective(order);
+        if (row <= 0) {
+            throw new RuntimeException("将订单更新为已支付状态失败订单ID: " + orderNo);
+        }
     }
 
     /**
